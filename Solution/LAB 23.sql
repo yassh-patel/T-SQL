@@ -1,0 +1,168 @@
+SELECT * FROM STUDENT
+
+--PART A
+-- Q1. Insert records into STUDENT table
+
+CREATE PROCEDURE SP_INSERT_STUDENT
+    @STDID INT,
+    @SNAME VARCHAR(50),
+    @CITY VARCHAR(50),
+    @SPI DECIMAL(4,2),
+    @BRANCH VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO STUDENT
+    VALUES (@STDID, @SNAME, @CITY, @SPI, @BRANCH);
+END;
+
+
+-- Execute
+EXEC SP_INSERT_STUDENT 115, 'PUSHTI', 'RAJKOT', 9.48, 'COMPUTER';
+EXEC SP_INSERT_STUDENT 116, 'NIKUNJ', 'SURAT', 8.80, 'CHEMICAL';
+
+-- Q2. Insert records into DEPOSIT table
+
+CREATE PROCEDURE SP_INSERT_DEPOSIT
+    @ACTNO INT,
+    @CNAME VARCHAR(50),
+    @BNAME VARCHAR(50),
+    @AMOUNT INT,
+    @ADATE DATE
+AS
+BEGIN
+    INSERT INTO DEPOSIT
+    VALUES (@ACTNO, @CNAME, @BNAME, @AMOUNT, @ADATE);
+END;
+
+
+-- Execute
+EXEC SP_INSERT_DEPOSIT 118, 'HEMENT BEDI', 'MAVDI', 16000, '2025-05-05';
+EXEC SP_INSERT_DEPOSIT 119, 'RAVI', 'MAVDI', 24000, '2024-07-09';
+
+SELECT * FROM DEPOSIT
+
+-- Q3. Update branch using Student ID
+
+CREATE PROCEDURE SP_UPDATE_STUDENT
+    @STDID INT,
+    @BRANCH VARCHAR(50)
+AS
+BEGIN
+    UPDATE STUDENT
+    SET BRANCH = @BRANCH
+    WHERE STDID = @STDID;
+END;
+
+-- Execute
+EXEC SP_UPDATE_STUDENT 115, 'ELECTRICAL';
+EXEC SP_UPDATE_STUDENT 116, 'MECHANICAL';
+
+-- Q4. Delete student whose name is RAVI
+
+CREATE PROCEDURE SP_DELETE_STUDENT
+AS
+BEGIN
+    DELETE FROM STUDENT
+    WHERE SNAME = 'RAVI';
+END;
+
+
+-- Execute
+EXEC SP_DELETE_STUDENT;
+
+-- Q5. Select student by Primary Key
+
+CREATE PROCEDURE SP_SELECT_STUDENT_BY_ID
+    @STDID INT
+AS
+BEGIN
+    SELECT *
+    FROM STUDENT
+    WHERE STDID = @STDID;
+END;
+
+
+-- Execute
+EXEC SP_SELECT_STUDENT_BY_ID 116;
+
+-- Q6. Display first 5 students according to highest SPI
+
+CREATE PROCEDURE SP_TOP_5_STUDENT
+AS
+BEGIN
+    SELECT TOP 5 *
+    FROM STUDENT
+    ORDER BY SPI DESC;
+END;
+
+-- Execute
+EXEC SP_TOP_5_STUDENT;
+
+-----------------------------------------------PART B-----------------------------------
+
+-- Q7. Display all employee details
+
+CREATE PROCEDURE SP_ALL_EMPLOYEE
+AS
+BEGIN
+    SELECT *
+    FROM EMPLOYEE;
+END;
+
+
+-- Execute
+EXEC SP_ALL_EMPLOYEE;
+
+
+-- Q8. Display employees according to department
+
+CREATE PROCEDURE SP_EMPLOYEE_BY_DEPARTMENT
+    @DEPARTMENT VARCHAR(50)
+AS
+BEGIN
+    SELECT *
+    FROM EMPLOYEE
+    WHERE DEPARTMENT = @DEPARTMENT;
+END;
+
+
+-- Execute
+EXEC SP_EMPLOYEE_BY_DEPARTMENT 'IT';
+
+---------------------------------------------------PART C-------------------------------
+-- Q9. Display department-wise maximum,
+-- minimum and average salary
+
+CREATE PROCEDURE SP_DEPT_SALARY
+AS
+BEGIN
+    SELECT
+        DEPARTMENT,
+        MAX(SALARY) AS MAX_SALARY,
+        MIN(SALARY) AS MIN_SALARY,
+        AVG(SALARY) AS AVG_SALARY
+    FROM EMPLOYEE
+    GROUP BY DEPARTMENT;
+END;
+
+
+-- Execute
+EXEC SP_DEPT_SALARY;
+
+-- Q10. Display total salary of given department
+
+CREATE PROCEDURE SP_TOTAL_SALARY
+    @DEPARTMENT VARCHAR(50)
+AS
+BEGIN
+    SELECT
+        DEPARTMENT,
+        SUM(SALARY) AS TOTAL_SALARY
+    FROM EMPLOYEE
+    WHERE DEPARTMENT = @DEPARTMENT
+    GROUP BY DEPARTMENT;
+END;
+
+
+-- Execute
+EXEC SP_TOTAL_SALARY 'IT';
